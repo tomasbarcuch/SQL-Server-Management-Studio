@@ -113,6 +113,23 @@ where
 DF.name in ('Plant','Comments','OrderPosition','Network','FIRST_DELIVERY_DATE','LAST_DELIVERY_DATE'))SRC
 pivot (max(SRC.Content) for SRC.Name   in ([Plant],[Comments],[OrderPosition],[Network],[FIRST_DELIVERY_DATE],[LAST_DELIVERY_DATE])) as Commission
 
+select ReceiptGoods.* from (
+select
+DV.Content CommissionNr,
+DV.[Description] ReceiptGoods, 
+D.[Description] Dimension,
+EDVR.EntityId,
+DF.Name, 
+DFV.Content
+from DimensionField DF
+inner join DimensionFieldValue DFV on Df.id = DFV.DimensionFieldId
+inner join EntityDimensionValueRelation EDVR on DFV.DimensionValueId = EDVR.DimensionValueId
+inner join DimensionValue DV on EDVR.DimensionValueId = DV.Id
+inner join Dimension D on DF.DimensionId = D.id and D.name = 'ReceiptGoods'
+where 
+DF.name in ('DELIVERYNOTE','DELIVERY_DATE','DELIVERER','PACKINGTYPE','LENGHT','WEIGHT','WIDTH','DANGEROUS_GOODS_CLASS','HEIGHT','NUMBER_OF_PACKAGES_OK','GOODS_LABELED_AND_SCANNED','NUMBER_OF_PACKAGES_OK_TEXT','DAMAGE','INVOICED','DAMAGE_WHAT','INVOICING_ DATE','DAMAGE_WHY','NOTE'))SRC
+pivot (max(SRC.Content) for SRC.Name   in ([DELIVERYNOTE],[DELIVERY_DATE],[DELIVERER],[PACKINGTYPE],[LENGHT],[WEIGHT],[WIDTH],[DANGEROUS_GOODS_CLASS],[HEIGHT],[NUMBER_OF_PACKAGES_OK],[GOODS_LABELED_AND_SCANNED],[NUMBER_OF_PACKAGES_OK_TEXT],[DAMAGE],[INVOICED],[DAMAGE_WHAT],[INVOICING_ DATE],[DAMAGE_WHY],[NOTE])) as ReceiptGoods
+
 select Ord.* from (
 select
 DV.Content 'OrderNr',

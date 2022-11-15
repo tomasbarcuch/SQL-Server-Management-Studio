@@ -1,6 +1,6 @@
 begin TRANSACTION
 
-Declare @DimensionId as UNIQUEIDENTIFIER = 'eddec8e0-cf01-4f4b-baf9-23c65498bb6b'
+Declare @DimensionId as UNIQUEIDENTIFIER = '45adc50f-f15b-4647-bbb2-d4b5e30ea251'
 
 
 

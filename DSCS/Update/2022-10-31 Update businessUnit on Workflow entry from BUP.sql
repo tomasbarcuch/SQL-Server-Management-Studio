@@ -1,49 +1,51 @@
 begin TRANSACTION
---update WFE set WFE.BusinessUnitId = DATA.BusinessUnitId
-select DATA.BusinessUnitId, WFE.BusinessUnitId, WFE.* 
-from WorkflowEntry WFE
-inner join BusinessUnit BU on WFE.BusinessUnitId = BU.id and BU.[Disabled] = 0
-inner join BusinessUnit CL on WFE.ClientBusinessUnitId = CL.id and CL.[Disabled] = 0
-inner join BusinessUnitRelation BUR on WFE.ClientBusinessUnitId = BUR.BusinessUnitId
 
-inner join (select BUP.BusinessUnitId, BUP.LoosePartId, BUP.Created,LAG(BUP.Created) over (order by BUP.loosepartid, BUP.created) CreatedStart from BusinessUnitPermission BUP
-inner join BusinessUnit BU on BUP.BusinessUnitId = BU.Id and BU.type <> 2
-
-where LoosePartId is not null
---and loosepartid = '7d4a0f8c-af68-4747-9eaf-78471e04a89f'
-) DATA on WFE.EntityId = DATA.LoosePartId 
-
-
-
-where WFE.ClientBusinessUnitId = WFE.BusinessUnitId 
-and cast(WFE.Created as DATE) between CAST(DATA.CreatedStart as DATE) and CAST(DATA.Created as DATE)
---and WFE.Created between DATA.CreatedStart and DATA.Created
-and DATA.BusinessUnitId in (BUR.RelatedBusinessUnitId)
-
-
-ROLLBACK
-
-begin TRANSACTION
 update WFE set WFE.BusinessUnitId = DATA.BusinessUnitId
---select DATA.BusinessUnitId, WFE.BusinessUnitId, WFE.* 
+--select WFE.ClientBusinessUnitId, WFE.Created,WFE.EntityId, DATA.*
+from WorkflowEntry WFE,
+
+(
+select 
+WFE.ClientBusinessUnitId
+,WFE.BusinessUnitId
+,min(WFE.created)  CreatedFirst
+,MAX(WFE.created)  CreatedLast
+,WFE.EntityId
 from WorkflowEntry WFE
-inner join BusinessUnit BU on WFE.BusinessUnitId = BU.id and BU.[Disabled] = 0
-inner join BusinessUnit CL on WFE.ClientBusinessUnitId = CL.id and CL.[Disabled] = 0
-inner join BusinessUnitRelation BUR on WFE.ClientBusinessUnitId = BUR.BusinessUnitId
 
-inner join (select BUP.BusinessUnitId, BUP.HandlingUnitId, BUP.Created,LAG(BUP.Created) over (order by BUP.HandlingUnitId, BUP.created) CreatedStart from BusinessUnitPermission BUP
-inner join BusinessUnit BU on BUP.BusinessUnitId = BU.Id and BU.type <> 2
+where 
+WFE.ClientBusinessUnitId is not null and WFE.BusinessUnitId is not null 
+and WFE.ClientBusinessUnitId <> WFE.BusinessUnitId
+--and EntityId = '1e4e3681-d05d-4045-976a-37081cd9b934'
+group by WFE.EntityId, WFE.BusinessUnitiD, WFE.ClientBusinessUnitId
 
-where HandlingUnitId is not null
-and HandlingUnitId = 'c0de557a-deb0-4e5e-9c80-277812973feb'
-) DATA on WFE.EntityId = DATA.HandlingUnitId 
+) DATA
 
-
-
-where WFE.ClientBusinessUnitId = WFE.BusinessUnitId 
-and cast(WFE.Created as DATE) between CAST(DATA.CreatedStart as DATE) and CAST(DATA.Created as DATE)
---and WFE.Created between DATA.CreatedStart and DATA.Created
-and DATA.BusinessUnitId in (BUR.RelatedBusinessUnitId)
+where 
+WFE.ClientBusinessUnitId is not null and WFE.BusinessUnitId is not null 
+and WFE.ClientBusinessUnitId = WFE.BusinessUnitId
+and 
+((WFE.Created between DATA.CreatedFirst and DATA.CreatedLast) ) and DATA.EntityId = WFE.EntityId
 
 
-ROLLBACK
+update WFE set WFE.BusinessUnitId = DATA.BusinessUnitId
+--select WFE.ClientBusinessUnitId, WFE.Created,WFE.EntityId, DATA.*
+from WorkflowEntry WFE,
+(
+select EntityId, BusinessUnitId from WorkflowEntry where ClusteredId in (
+select
+--WFE.EntityId, 
+MAX(WFE.ClusteredId)  Last
+from WorkflowEntry WFE
+where 
+WFE.ClientBusinessUnitId is not null and WFE.BusinessUnitId is not null 
+and WFE.ClientBusinessUnitId <> WFE.BusinessUnitId
+--and EntityId = '4d3353b9-4d70-401b-93f2-ea6aa43886e3'
+group by  WFE.EntityId
+)
+) DATA 
+where 
+WFE.ClientBusinessUnitId is not null and WFE.BusinessUnitId is not null 
+and WFE.ClientBusinessUnitId = WFE.BusinessUnitId
+and DATA.EntityId = WFE.EntityId
+COMMIT
