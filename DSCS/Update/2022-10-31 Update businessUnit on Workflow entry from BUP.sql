@@ -49,3 +49,11 @@ WFE.ClientBusinessUnitId is not null and WFE.BusinessUnitId is not null
 and WFE.ClientBusinessUnitId = WFE.BusinessUnitId
 and DATA.EntityId = WFE.EntityId
 COMMIT
+
+begin TRANSACTION
+
+declare @client as UNIQUEIDENTIFIER = (Select id from BusinessUnit where name = 'KRONES GLOBAL')
+declare @Packer as UNIQUEIDENTIFIER = (Select id from BusinessUnit where name = 'Deufol Neutraubling')
+update WFE set WFE.BusinessUnitId = @Packer from  WorkflowEntry WFE where WFE.ClientBusinessUnitId = @client and WFE.BusinessUnitId = @client
+
+ROLLBACK
