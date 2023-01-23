@@ -1,4 +1,4 @@
-DECLARE @client as UNIQUEIDENTIFIER = (select id from BusinessUnit where name = 'DEUFOL CUSTOMERS')
+DECLARE @client as UNIQUEIDENTIFIER = (select id from BusinessUnit where name = 'KRONES GLOBAL')
 
 select CASE WHEN WFUSED.Entity IS NULL then 'NOT USED' ELSE 'USED' END as USED,
  CASE WF.Entity

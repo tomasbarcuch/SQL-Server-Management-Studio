@@ -67,6 +67,7 @@ where A.BCSaction = 5 and AP.permissionID <>
 inner join BCSAction A on AP.ActionId = A.id
 where A.BCSaction = 5 and AP.permissionID <> 
 (select id from Permission where Name = 'Packing_BCSAction_5'))
+
  
 update AP set AP.permissionID = 
 (select id from Permission where Name = 'Unpacking_BCSAction_6')
@@ -366,16 +367,92 @@ where A.BCSaction = 34 and AP.permissionID <>
 (select id from Permission where Name = 'DisconnectDevice_BCSAction_34'))
 
 update AP set AP.permissionID = 
-(select id from Permission where Name = 'Packing_BCSAction_5')
+(select id from Permission where Name = 'RemoveDimensions_BCSAction_36')
 from BCSActionPermission AP
 inner join BCSAction A on AP.ActionId = A.id
-where A.BCSaction = 35 and AP.permissionID <> 
-(select id from Permission where Name = 'Packing_BCSAction_5')
+where A.BCSaction = 36 and AP.permissionID <> 
+(select id from Permission where Name = 'RemoveDimensions_BCSAction_36')
 and AP.ID = (select top(1) AP.id from BCSActionPermission AP
 inner join BCSAction A on AP.ActionId = A.id
-where A.BCSaction = 35 and AP.permissionID <> 
-(select id from Permission where Name = 'Packing_BCSAction_5'))
+where A.BCSaction = 36 and AP.permissionID <> 
+(select id from Permission where Name = 'RemoveDimensions_BCSAction_36'))
 
+update AP set AP.permissionID = 
+(select id from Permission where Name = 'DeleteShipmentLine_BCSAction_37')
+from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 37 and AP.permissionID <> 
+(select id from Permission where Name = 'DeleteShipmentLine_BCSAction_37')
+and AP.ID = (select top(1) AP.id from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 37 and AP.permissionID <> 
+(select id from Permission where Name = 'DeleteShipmentLine_BCSAction_37'))
+
+update AP set AP.permissionID = 
+(select id from Permission where Name = '')
+from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 34 and AP.permissionID <> 
+(select id from Permission where Name = '')
+and AP.ID = (select top(1) AP.id from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 34 and AP.permissionID <> 
+(select id from Permission where Name = ''))
+
+update AP set AP.permissionID = 
+(select id from Permission where Name = 'CreatePackingOrderHeader_BCSAction_38')
+from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 38 and AP.permissionID <> 
+(select id from Permission where Name = 'CreatePackingOrderHeader_BCSAction_38')
+and AP.ID = (select top(1) AP.id from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 38 and AP.permissionID <> 
+(select id from Permission where Name = 'CreatePackingOrderHeader_BCSAction_38'))
+
+update AP set AP.permissionID = 
+(select id from Permission where Name = 'AssignOrderHeader_BCSAction_39')
+from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 39 and AP.permissionID <> 
+(select id from Permission where Name = 'AssignOrderHeader_BCSAction_39')
+and AP.ID = (select top(1) AP.id from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 39 and AP.permissionID <> 
+(select id from Permission where Name = 'AssignOrderHeader_BCSAction_39'))
+
+update AP set AP.permissionID = 
+(select id from Permission where Name = 'ISPM_Attach_BCSAction_42')
+from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 42 and AP.permissionID <> 
+(select id from Permission where Name = 'ISPM_Attach_BCSAction_42')
+and AP.ID = (select top(1) AP.id from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 42 and AP.permissionID <> 
+(select id from Permission where Name = 'ISPM_Attach_BCSAction_42'))
+
+update AP set AP.permissionID = 
+(select id from Permission where Name = 'ISPM_Detach_BCSAction_43')
+from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 43 and AP.permissionID <> 
+(select id from Permission where Name = 'ISPM_Detach_BCSAction_43')
+and AP.ID = (select top(1) AP.id from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 43 and AP.permissionID <> 
+(select id from Permission where Name = 'ISPM_Detach_BCSAction_43'))
+
+update AP set AP.permissionID = 
+(select id from Permission where Name = 'AssignDimensions_BCSAction_44')
+from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 44 and AP.permissionID <> 
+(select id from Permission where Name = 'AssignDimensions_BCSAction_44')
+and AP.ID = (select top(1) AP.id from BCSActionPermission AP
+inner join BCSAction A on AP.ActionId = A.id
+where A.BCSaction = 44 and AP.permissionID <> 
+(select id from Permission where Name = 'AssignDimensions_BCSAction_44'))
 
 commit
 
@@ -543,11 +620,17 @@ update workflow set PermissionId = 
 where Action = 32 and (PermissionId not in  
 (select id from Permission where Name in ('LastShipmentLineDeleted_PortalAction_32','ADMIN_ONLY')))
 
+update workflow set PermissionId = 
+(select id from Permission where Name = 'Transshipment_PortalAction_33') 
+where Action = 32 and (PermissionId not in  
+(select id from Permission where Name in ('Transshipment_PortalAction_33','ADMIN_ONLY')))
 
+update workflow set PermissionId = 
+(select id from Permission where Name = 'Disconnected_PortalAction_39') 
+where Action = 32 and (PermissionId not in  
+(select id from Permission where Name in ('Disconnected_PortalAction_39','ADMIN_ONLY')))
 
-
-
-COMMIT
+ROLLBACK
 
 
 

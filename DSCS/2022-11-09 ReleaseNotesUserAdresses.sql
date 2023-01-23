@@ -11,4 +11,3 @@ where
 U.disabled = 0 and U.IsAdmin = 1 and u.login not like '%test%' and email not in ('novalid@deufol.com','Deufol321@deufol.com')
 
 
-select id from [User] where login = 'tomas.barcuch'

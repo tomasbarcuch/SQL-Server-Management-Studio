@@ -86,4 +86,4 @@ inner join [Status] OS on WF.OldStatusId = OS.Id
 inner join [Status] NS on WF.NewStatusId = NS.Id
 
 
-where bup.BusinessUnitId in ( select BusinessUnitId from BusinessUnitRelation BUR where BUR.RelatedBusinessUnitId in (select id from BusinessUnit where name in ('Deufol Hamburg Ellerholzdamm','Deufol Hamburg Rosshafen','Deufol Hub Bremerhaven')))
+where bup.BusinessUnitId in ( select BusinessUnitId from BusinessUnitRelation BUR where BUR.RelatedBusinessUnitId in (select id from BusinessUnit where name in ('Deufol Hamburg Rosshafen')))

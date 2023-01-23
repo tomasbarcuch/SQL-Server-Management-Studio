@@ -4,19 +4,19 @@
 begin TRANSACTION 
 declare @handlingunitid as UNIQUEIDENTIFIER
 declare @parenthandlingunitid as UNIQUEIDENTIFIER
-set @handlingunitid = '3de828af-3e14-4a0a-b897-b3e995d576f7'
+set @handlingunitid = '32195024-f8b5-43bd-9372-8388d4945717'
 
 
 delete from BusinessUnitPermission where HandlingUnitId = @handlingunitid
 delete from EntityDimensionValueRelation where EntityId = @handlingunitid
 delete from BusinessUnitPermission where ShipmentLineid in (select id from ShipmentLine where HandlingUnitId = @handlingunitid)
---delete from BusinessUnitPermission where HandlingUnitId = @parenthandlingunitid
+delete from BusinessUnitPermission where HandlingUnitId = @parenthandlingunitid
 delete from WarehouseEntry where HandlingUnitId = @handlingunitid
 delete from WorkFlowEntry where EntityId = @handlingunitid
 delete from CustomFieldValueMapping where EntityId = @handlingunitid
---delete from WarehouseEntry where HandlingUnitId = @parenthandlingunitid
---delete from WarehouseEntry where ParentHandlingUnitId = @handlingunitid
---delete from WarehouseContent where ParentHandlingUnitId = @handlingunitid
+delete from WarehouseEntry where HandlingUnitId = @parenthandlingunitid
+delete from WarehouseEntry where ParentHandlingUnitId = @handlingunitid
+delete from WarehouseContent where ParentHandlingUnitId = @handlingunitid
 delete from WarehouseContent where HandlingUnitId = @handlingunitid
 delete from HandlingUnitIdentifier where HandlingUnitId = @handlingunitid
 delete from ShipmentLine where HandlingUnitId = @handlingunitid
@@ -30,7 +30,7 @@ ROLLBACK
 
 begin TRANSACTION 
 declare @loosepartid as UNIQUEIDENTIFIER
-set @loosepartid = '497038ba-315f-4ecd-949d-2cca292af11f'
+set @loosepartid = '8529cbc9-cd6f-4c67-abe6-8546898b7603'
 
 delete from BusinessUnitPermission where LoosePartId = @loosepartid
 delete from BusinessUnitPermission where PackingOrderLineId in (select id from PackingOrderLine where LoosePartId = @loosepartid)
@@ -56,7 +56,7 @@ GETUTCDATE(),
 GETUTCDATE()
 )
 
-COMMIT
+ROLLBACK
 
 
 begin TRANSACTION 

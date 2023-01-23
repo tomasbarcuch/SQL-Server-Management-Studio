@@ -1,4 +1,4 @@
-DECLARE @FromDate as DATE = '2022-06-01'
+DECLARE @FromDate as DATE = '2023-01-01'
 
 PRINT 'TOTAL COUNT OF USED REPORTS:'
 select 

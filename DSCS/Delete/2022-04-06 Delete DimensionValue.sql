@@ -1,6 +1,6 @@
 begin TRANSACTION
 
-declare @DimensionValueId as UNIQUEIDENTIFIER = '76323dad-e616-421c-87b6-59e5e9cd932e'
+declare @DimensionValueId as UNIQUEIDENTIFIER = '26607ea3-b605-469f-9ef2-712d6d518338'
 
 delete from BusinessUnitPermission where DimensionValueId = @DimensionValueId
 delete from EntityDimensionValueRelation where DimensionValueId = @DimensionValueId

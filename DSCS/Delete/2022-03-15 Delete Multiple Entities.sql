@@ -46,13 +46,9 @@ END;
 CLOSE ENTITYID;
 DEALLOCATE ENTITYID;
 
-
-COMMIT
-
-
-
+ROLLBACK
 --smazání duplicitně vytvořené HU - patrně chyba frameworku při zakládání importované položky
-begin TRANSACTION 
+ BEGIN TRANSACTION
 declare @handlingunitid as UNIQUEIDENTIFIER
 DECLARE ENTITYID CURSOR FOR 
 
@@ -98,4 +94,4 @@ END;
 CLOSE ENTITYID;
 DEALLOCATE ENTITYID;
 
-COMMIT
+ROLLBACK
