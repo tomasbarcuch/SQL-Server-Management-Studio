@@ -1,12 +1,20 @@
-
+SELECT * from (
 select
+CASE 
 
-'Lagerbestand' 'STATUS'
+    WHEN Project.ProjectNr = 'ESSO' THEN Project.Project
+    WHEN (Project.ProjectNr <> 'ESSO' OR Project.ProjectNr IS NULL)  AND Outbound.Outbound IS NOT NULL THEN 'AUSLIEFERUNGEN'
+    WHEN (Project.ProjectNr <> 'ESSO' OR Project.ProjectNr IS NULL) AND Packing.Packing IS NOT NULL AND Outbound.Outbound IS NULL THEN 'VERPACKTE'
+    WHEN (Project.ProjectNr <> 'ESSO' OR Project.ProjectNr IS NULL)  AND Inbound.Inbound IS NOT NULL AND Packing.Packing IS NULL AND Outbound.Outbound IS NULL THEN 'LAGERBESTAND'
+     ELSE
+    'FRISCH' 
+END 'STATUS'
 ,ISNULL(ReceiptGoods.BEMERKUNG2, '') 'Siemens Versandaufgabe'
 ,ISNULL(ReceiptGoods.SDU_BESTELLPOS, '')  'Pos1'
 ,ReceiptGoodsNr 'Labelnummer'
 ,CV.Content 'Dienstleister'
 ,CAST(Inbound.Inbound as DATE) 'Datum WE'
+--,Packing.Packing
 ,'' 'Siemens Abholavis'
 ,'' 'Pos2'
 ,ISNULL(ACTCRATES.ActualCode, '') 'Externe WA-Nummer'
@@ -65,17 +73,8 @@ END AS "Feld"
 ,'' 'Freifeld'
 --,LOOSEPARTS.LooseParts 'Inhalt'
 
-/*
-HU.Code,
-HU.ColliNumber,
-LP.Code,
-B.Code,
-Project.*,
-ReceiptGoods.*,
-Outbound.Outbound,
-LoadingReceiptGoods.*
-*/
- from (
+
+from (
 select
 DV.ParentDimensionValueId,
 DV.Id DimensionValueId ,
@@ -85,13 +84,13 @@ D.[Description] Dimension,
 S.Name as Status,
 DF.Name, 
 DFV.Content
-from DimensionField DF
-inner join DimensionFieldValue DFV on Df.id = DFV.DimensionFieldId
-INNER join EntityDimensionValueRelation EDVR on DFV.DimensionValueId = EDVR.DimensionValueId
-inner join DimensionValue DV on EDVR.DimensionValueId = DV.Id
+from DimensionValue DV --DimensionField DF
+inner join DimensionFieldValue DFV on DV.id = DFV.DimensionValueId
+inner join DimensionField DF on DFV.DimensionFieldId = DF.Id
 inner join Dimension D on DF.DimensionId = D.id and D.name = 'ReceiptGoods'
 inner join BusinessUnitPermission BUP on D.id = BUP.DimensionId and BUP.BusinessUnitId = (Select id from BusinessUnit where name = 'Siemens Duisburg')
 inner join Status S on DV.StatusId = S.id
+INNER join EntityDimensionValueRelation EDVR on DFV.DimensionValueId = EDVR.DimensionValueId
 where 
 DF.name in ('DAMAGE','DAMAGE_WHAT','DAMAGE_WHY','LENGHT','WIDTH','HEIGHT','GROSSW','HUTYPE','DANGEROUS_GOODS','IS_BILLED','INVOICE_MONTH','FREE_TEXT_INVOICE_NO','BEMERKUNG2','BEMERKUNG7','BEMERKUNG3','BEMERKUNG5','BEMERKUNG4','SDU_BESTELLNR','SDU_BESTELLPOS','SDU_ZOLLGUT','SDU_KENNZAHL','SDU_KUNDENAUFTRAG','SDU_VAN_ID'))SRC
 pivot (max(SRC.Content) for SRC.Name   in ([DAMAGE],[DAMAGE_WHAT],[DAMAGE_WHY],[LENGHT],[WIDTH],[HEIGHT],[GROSSW],[HUTYPE],[DANGEROUS_GOODS],[IS_BILLED],[INVOICE_MONTH],[FREE_TEXT_INVOICE_NO],[BEMERKUNG2],[BEMERKUNG7],[BEMERKUNG3],[BEMERKUNG5],[BEMERKUNG4],[SDU_BESTELLNR],[SDU_BESTELLPOS],[SDU_ZOLLGUT],[SDU_KENNZAHL],[SDU_KUNDENAUFTRAG],[SDU_VAN_ID])) as ReceiptGoods
@@ -104,17 +103,17 @@ D.[Description] Dimension,
 --EDVR.EntityId,
 DF.Name, 
 DFV.Content
-from DimensionField DF
-inner join DimensionFieldValue DFV on Df.id = DFV.DimensionFieldId
-inner join EntityDimensionValueRelation EDVR on DFV.DimensionValueId = EDVR.DimensionValueId
-inner join DimensionValue DV on EDVR.DimensionValueId = DV.Id
+from DimensionValue DV --DimensionField DF
+inner join DimensionFieldValue DFV on DV.id = DFV.DimensionValueId
+inner join DimensionField DF on DFV.DimensionFieldId = DF.Id
 inner join Dimension D on DF.DimensionId = D.id and D.name = 'LoadingReceiptGoods'
 inner join BusinessUnitPermission BUP on D.id = BUP.DimensionId and BUP.BusinessUnitId = (Select id from BusinessUnit where name = 'Siemens Duisburg')
+inner join Status S on DV.StatusId = S.id
+INNER join EntityDimensionValueRelation EDVR on DFV.DimensionValueId = EDVR.DimensionValueId
 
 where 
 DF.name in ('LOADING_DATE','RESPONSIBLE_FOR_LOADING','ACCOMPANYING_DOCUMENTS','SUPPLIER','DELIVERYNOTE','DAMAGE','DAMAGE_WHY','DAMAGE_WHAT','GOODS_LABELED_AND_SCANNED','NUMBER_OF_PACKAGES_OK','NUMBER_OF_PACKAGES_OK_TEXT'))SRC
 pivot (max(SRC.Content) for SRC.Name   in ([LOADING_DATE],[RESPONSIBLE_FOR_LOADING],[ACCOMPANYING_DOCUMENTS],[SUPPLIER],[DELIVERYNOTE],[DAMAGE],[DAMAGE_WHY],[DAMAGE_WHAT],[GOODS_LABELED_AND_SCANNED],[NUMBER_OF_PACKAGES_OK],[NUMBER_OF_PACKAGES_OK_TEXT])) as LoadingReceiptGoods on ReceiptGoods.ParentDimensionValueId = LoadingReceiptGoods.DimensionValueId
-
 
 
 INNER JOIN (
@@ -168,7 +167,24 @@ group by
 Dimensions.ReceiptGoods
 ) Outbound on ReceiptGoods.DimensionValueId = Outbound.ReceiptGoods
 
-
+LEFT JOIN (
+select 
+Dimensions.ReceiptGoods
+,Min(WFE.Created) as Packing
+from WorkflowEntry WFE
+INNER JOIN  (
+select D.name, DV.Id as DimensionValueId, edvr.EntityId from DimensionValue DV 
+left join Dimension D on DV.DimensionId = D.id 
+left join EntityDimensionValueRelation EDVR on DV.Id = EDVR.DimensionValueId
+left join DimensionField DF on D.id = DF.DimensionId
+where D.name in ('ReceiptGoods')
+) SRC
+PIVOT (max(src.DimensionValueId) for src.Name  in ([ReceiptGoods])
+        ) as Dimensions on WFE.EntityId = Dimensions.EntityId
+inner join [Status] S on WFE.StatusId = S.Id and S.NAME in ('IN_CRATE', 'ITEM_INSIDE')
+group by 
+Dimensions.ReceiptGoods
+) Packing on ReceiptGoods.DimensionValueId = Packing.ReceiptGoods
 
 
 LEFT JOIN (
@@ -370,24 +386,13 @@ SELECT
 
 ) CV on ReceiptGoods.DimensionValueId = CV.ID 
 
---LEFT JOIN EntityDimensionValueRelation EDVRLP on ReceiptGoods.DimensionValueId = EDVRLP.DimensionValueId and EDVRLP.Entity = 15
---LEFT JOIN LoosePart LP on EDVRLP.EntityId = LP.Id
---LEFT JOIN HandlingUnit ACTHU on LP.ActualHandlingUnitId = ACTHU.Id
---LEFT JOIN ShipmentHeader SH on LP.ShipmentHeaderId = SH.Id
---LEFT JOIN Bin B on LP.ActualBinId = B.Id
---LEFT JOIN Zone Z on LP.ActualZoneId = Z.Id
---LEFT JOIN CustomValue CV on Z.Id = CV.EntityId and CV.CustomFieldId = 'a88a1229-dba4-419e-a47c-097fca73fff0'
 
+--where [Z].[NAME] NOT IN ('Werksverpackung', 'Aussenbaustelle', 'Münsterland') 
 
-where Project.ProjectNr not in ('ESSO')
-and [Z].[NAME] NOT IN ('Werksverpackung', 'Außenbaustelle', 'Münsterland') 
-
---and Inbound.Inbound BETWEEN '2023-01-01' AND '2023-01-31'
-
-UNION 
+UNION
 
 SELECT
-'Lagerbestand' 'STATUS'
+'LAGERBESTAND' 'STATUS'
 ,ISNULL(ReceiptGoods.BEMERKUNG2, '') 'Siemens Versandaufgabe'
 ,ISNULL(ReceiptGoods.SDU_BESTELLPOS, '')  'Pos1'
 ,ReceiptGoodsNr 'Labelnummer'
@@ -461,11 +466,11 @@ inner join Dimension D on DF.DimensionId = D.id and D.name = 'ReceiptGoods'
 inner join BusinessUnitPermission BUP on D.id = BUP.DimensionId and BUP.BusinessUnitId = (Select id from BusinessUnit where name = 'Siemens Duisburg')
 inner join Status S on DV.StatusId = S.id
 LEFT join EntityDimensionValueRelation EDVR on DFV.DimensionValueId = EDVR.DimensionValueId
-where EDVR.EntityId IS NULL AND
+where (EDVR.EntityId IS NULL) AND (select COUNT(EDVR.ID) from EntityDimensionValueRelation EDVR where EDVR.DimensionValueId = DV.id) = 0 AND
 DF.name in ('DAMAGE','DAMAGE_WHAT','DAMAGE_WHY','LENGHT','WIDTH','HEIGHT','GROSSW','HUTYPE','DANGEROUS_GOODS','IS_BILLED','INVOICE_MONTH','FREE_TEXT_INVOICE_NO','BEMERKUNG2','BEMERKUNG7','BEMERKUNG3','BEMERKUNG5','BEMERKUNG4','SDU_BESTELLNR','SDU_BESTELLPOS','SDU_ZOLLGUT','SDU_KENNZAHL','SDU_KUNDENAUFTRAG','SDU_VAN_ID'))SRC
 pivot (max(SRC.Content) for SRC.Name   in ([DAMAGE],[DAMAGE_WHAT],[DAMAGE_WHY],[LENGHT],[WIDTH],[HEIGHT],[GROSSW],[HUTYPE],[DANGEROUS_GOODS],[IS_BILLED],[INVOICE_MONTH],[FREE_TEXT_INVOICE_NO],[BEMERKUNG2],[BEMERKUNG7],[BEMERKUNG3],[BEMERKUNG5],[BEMERKUNG4],[SDU_BESTELLNR],[SDU_BESTELLPOS],[SDU_ZOLLGUT],[SDU_KENNZAHL],[SDU_KUNDENAUFTRAG],[SDU_VAN_ID])) as ReceiptGoods
 
-inner join (select
+LEFT join (select
 DV.Id DimensionValueId,
 DV.Content LoadingReceiptGoodsNr,
 DV.[Description] LoadingReceiptGoods, 
@@ -479,9 +484,17 @@ inner join DimensionField DF on DFV.DimensionFieldId = DF.Id
 inner join Dimension D on DF.DimensionId = D.id and D.name = 'LoadingReceiptGoods'
 inner join BusinessUnitPermission BUP on D.id = BUP.DimensionId and BUP.BusinessUnitId = (Select id from BusinessUnit where name = 'Siemens Duisburg')
 inner join Status S on DV.StatusId = S.id
-LEFT join EntityDimensionValueRelation EDVR on DFV.DimensionValueId = EDVR.DimensionValueId
-where EDVR.EntityId IS NULL AND
+LEFT join EntityDimensionValueRelation EDVR on DFV.DimensionValueId = EDVR.DimensionValueId 
+where (EDVR.EntityId IS NULL) AND (select COUNT(EDVR.ID) from EntityDimensionValueRelation EDVR where EDVR.DimensionValueId = DV.id ) = 0 AND
 DF.name in ('LOADING_DATE','RESPONSIBLE_FOR_LOADING','ACCOMPANYING_DOCUMENTS','SUPPLIER','DELIVERYNOTE','DAMAGE','DAMAGE_WHY','DAMAGE_WHAT','GOODS_LABELED_AND_SCANNED','NUMBER_OF_PACKAGES_OK','NUMBER_OF_PACKAGES_OK_TEXT'))SRC
 pivot (max(SRC.Content) for SRC.Name   in ([LOADING_DATE],[RESPONSIBLE_FOR_LOADING],[ACCOMPANYING_DOCUMENTS],[SUPPLIER],[DELIVERYNOTE],[DAMAGE],[DAMAGE_WHY],[DAMAGE_WHAT],[GOODS_LABELED_AND_SCANNED],[NUMBER_OF_PACKAGES_OK],[NUMBER_OF_PACKAGES_OK_TEXT])) as LoadingReceiptGoods on ReceiptGoods.ParentDimensionValueId = LoadingReceiptGoods.DimensionValueId
-
-
+) DATA
+ORDER BY 
+CASE DATA.STATUS 
+WHEN 'LAGERBESTAND' THEN 1
+WHEN 'VERPACKTE' THEN 2
+WHEN 'AUSLIEFERUNGEN' THEN 3
+WHEN 'ESSO' THEN 4
+WHEN 'FRISCH' THEN 5
+ELSE 6 END
+, DATA.Labelnummer ASC, DATA.[Datum WE] ASC
