@@ -1,6 +1,6 @@
 select 
 1 as count,
-Packer.name as Packer,
+--Packer.name as Packer,
 Client.name as Client,
  case entity
 when 0 then 'dbo.Address'
@@ -80,10 +80,10 @@ WF.DESCRIPTION
  from workflow WF
 inner join BusinessUnitPermission BUP on wf.Id = bup.WorkflowId
 inner join BusinessUnit Client on BUP.BusinessUnitId = Client.Id
-inner join BusinessUnitRelation BUR on BUP.BusinessUnitId = BUR.BusinessUnitId
-inner join BusinessUnit Packer on BUR.RelatedBusinessUnitId = Packer.Id
+--inner join BusinessUnitRelation BUR on BUP.BusinessUnitId = BUR.BusinessUnitId
+--inner join BusinessUnit Packer on BUR.RelatedBusinessUnitId = Packer.Id
 inner join [Status] OS on WF.OldStatusId = OS.Id
 inner join [Status] NS on WF.NewStatusId = NS.Id
 
 
-where bup.BusinessUnitId in ( select BusinessUnitId from BusinessUnitRelation BUR where BUR.RelatedBusinessUnitId in (select id from BusinessUnit where name in ('Deufol Hamburg Rosshafen')))
+where bup.BusinessUnitId in (select id from BusinessUnit where name in ('Diverse Kunden Dortmund','DEUFOL CUSTOMERS'))

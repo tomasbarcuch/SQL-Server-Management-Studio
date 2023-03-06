@@ -46,6 +46,13 @@ group by BusinessUnitId, ShipmentLineId
 having count(ID) > 1
 )
 
+delete from BusinessUnitPermission where id in (
+select min(Id)--, count(ID), BusinessUnitId, ShipmentLineId
+from BusinessUnitPermission
+where InventoryLineId is not NULL
+group by BusinessUnitId, InventoryLineId
+having count(ID) > 1
+)
 
 
 delete  from BusinessUnitPermission where id in (

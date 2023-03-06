@@ -1,7 +1,19 @@
 begin TRANSACTION
 
-INSERT into CuttingForms
+--INSERT into CuttingForms
 
+UPDATE CF set CF.Description = FORMS.[Description]
+/*
+select 
+CF.Code, 
+FORMS.Code,
+SUBSTRING(FORMS.[Description], CHARINDEX('-',FORMS.[Description])+2,LEN(FORMS.[Description]))
+
+*/
+
+from CuttingForms CF
+
+left join (
 SELECT [Code]
 ,[Description]
 ,[Note]
@@ -20,8 +32,8 @@ SELECT [Code]
 ,[Updated]
  FROM (VALUES 
 
-('4','4 - 110x90 - 94z ','',0,7,0,110,90,4,9.4833,2,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('5','5 - 100x50 - 94z ','',0,7,0,100,50,4,9.69,2,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+('4','110x90 - 94z ','',0,7,0,110,90,4,9.4833,2,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+('5','100x50 - 94z ','',0,7,0,100,50,4,9.69,2,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('6','6 - 210x298.45 - 94z Atyp - A4 na víno Macek','Atyp - A4 na víno Macek',0,7,0,210,298.45,0,0,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('7','7 - 0x0 - 0z neobsazeno','neobsazeno',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('8','8 - 121x40 - 78z Klobásy - Farpap','Klobásy - Farpap',0,7,0,121,40,38,2.825,5,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
@@ -423,10 +435,10 @@ SELECT [Code]
 ('403','403 - 127x99 - 96z ','',0,7,0,127,99,0,2.6,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('404','404 - 139x149.2 - 96z P,Z,P (139x86, 90x60)','P,Z,P (139x86, 90x60)',0,7,0,139,149.2,0,3.2,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('405','405 - 80x66 - 89z atyp - Bisenc zadní','atyp - Bisenc zadní',0,7,0,80,66,3,4.644,2,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('406','406 - 143x98 - 96z atyp - eler ','atyp - eler ',0,7,0,143,98,0,3.6,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('407','407 - 143x98 - 96z atyp - eler','atyp - eler',0,7,0,143,98,0,3.6,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('408','408 - 194x142 - 94z atyp - eler 5L','atyp - eler 5L',0,7,0,194,142,0,7.225,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('409','409 - 194x142 - 94z atyp - eler 5L','atyp - eler 5L',0,7,0,194,142,0,7.225,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('406','406 - 143x98 - 96z atyp - eler ','atyp - eler ',0,7,0,143,98,0,3.6,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('407','407 - 143x98 - 96z atyp - eler','atyp - eler',0,7,0,143,98,0,3.6,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('408','408 - 194x142 - 94z atyp - eler 5L','atyp - eler 5L',0,7,0,194,142,0,7.225,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('409','409 - 194x142 - 94z atyp - eler 5L','atyp - eler 5L',0,7,0,194,142,0,7.225,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('410','410 - 13.6x114.6 - 78z ','',0,7,0,13.6,114.6,3.4,9.225,8,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('411','411 - 101.3x95.2 - 96z atyp - neladrinks','atyp - neladrinks',0,7,0,101.3,95.2,0,6.4,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('412','412 - 166x75 - 78z atyp - Vinium','atyp - Vinium',0,7,0,166,75,0,7.55,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
@@ -573,11 +585,11 @@ SELECT [Code]
 ('553','553 - 90x184.1 - 64z P,Z,P (90x110 a 90x55) !!! Stejně vysoké et.','P,Z,P (90x110 a 90x55) !!! Stejně vysoké et.',0,7,0,90,184.1,0,19.1,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('554','554 - 25x50 - 94z pro A4 (větší rádius)','pro A4 (větší rádius)',0,7,0,25,50,3,9.69,7,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('555','555 - 90x191.6 - 64z P,Z,P (90x120 a 85x60)','P,Z,P (90x120 a 85x60)',0,7,0,90,191.6,0,11.6,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('556','556 - 0x0 - 0z atyp - Dufek sekty','atyp - Dufek sekty',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('556','556 - 0x0 - 0z atyp - Dufek sekty','atyp - Dufek sekty',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('557','557 - 70x70 - 70z ','',0,7,0,70,70,3,4.08,2,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('558','558 - 0x0 - 0z atyp - Dufek sekty','atyp - Dufek sekty',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('558','558 - 0x0 - 0z atyp - Dufek sekty','atyp - Dufek sekty',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('559','559 - 120x135.6437 - 89z P,Z,P (120x75 a 80x55)','P,Z,P (120x75 a 80x55)',0,7,0,120,135.6437,0,5.6437,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('560','560 - 0x0 - 0z atyp - medaile   ','atyp - medaile   ',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('560','560 - 0x0 - 0z atyp - medaile   ','atyp - medaile   ',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('561','561 - 83x131 - 89z atyp - Zemánek sekt','atyp - Zemánek sekt',0,7,0,83,131,0,10.29,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('562','562 - 0x0 - 0z atyp - zemánek krček','atyp - zemánek krček',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('563','563 - 0x0 - 0z atyp - hradil EDALE','atyp - hradil EDALE',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
@@ -596,7 +608,7 @@ SELECT [Code]
 ('576','576 - 0x0 - 0z atyp - Zborovský','atyp - Zborovský',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('577','577 - 0x0 - 0z atyp - Bíza (Edale)','atyp - Bíza (Edale)',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('578','578 - 85x179.46 - 119z Springer P,Z,P (85x105 a 85x65)','Springer P,Z,P (85x105 a 85x65)',0,7,0,85,179.46,0,9.4525,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('579','579 - 0x0 - 0z atyp - medaile','atyp - medaile',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('579','579 - 0x0 - 0z atyp - medaile','atyp - medaile',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('580','580 - 0x0 - 0z atyp - Rusnok','atyp - Rusnok',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('581','581 - 134x120 - 78z atyp - 2x P (42x120) a 2x Z (42x54)','atyp - 2x P (42x120) a 2x Z (42x54)',0,7,0,134,120,0,3.82,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('582','582 - 70x226 - 77z ','',0,7,0,70,226,3,18.48,2,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
@@ -605,7 +617,7 @@ SELECT [Code]
 ('585','585 - 90x160 - 110z ','',0,7,0,90,160,5,14.625,2,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('586','586 - 0x0 - 0z atyp - Fera','atyp - Fera',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('587','587 - 23x50 - 89z ','',0,7,0,23,50,3,6.515,3,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('588','588 - 0x0 - 0z atyp - Baloun','atyp - Baloun',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('588','588 - 0x0 - 0z atyp - Baloun','atyp - Baloun',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('589','589 - 0x0 - 0z atyp - Bobojčev','atyp - Bobojčev',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('590','590 - 80x60 - 81z ','',0,7,0,80,60,3,4.29,2,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('591','591 - 0x0 - 0z atyp - Huserek nové','atyp - Huserek nové',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
@@ -640,7 +652,7 @@ SELECT [Code]
 ('620','620 - 30x30 - 81z kolečko - EDALE','kolečko - EDALE',0,7,0,30,30,4,2.1468,4,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('621','621 - 75x105 - 70z Edale','Edale',0,7,0,75,105,0,6.125,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('622','622 - 75x58 - 77z Edale','Edale',0,7,0,75,58,3,3.11875,2,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('623','623 - 0x0 - 0z atyp - Dufek sekty','atyp - Dufek sekty',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('623','623 - 0x0 - 0z atyp - Dufek sekty','atyp - Dufek sekty',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('624','624 - 0x0 - 0z atyp - Rozařín','atyp - Rozařín',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('625','625 - 0x0 - 0z atyp - Vitis - levná','atyp - Vitis - levná',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('626','626 - 0x0 - 0z atyp - tichý šikmá','atyp - tichý šikmá',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
@@ -692,8 +704,8 @@ SELECT [Code]
 ('672','672 - 130x149.2 - 96z P,Z,P 130x99 a 110x46','P,Z,P 130x99 a 110x46',0,7,0,130,149.2,0,3.2,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('673','673 - 50x50 - 70z ','',0,7,0,50,50,3,5.56,2,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('674','674 - 0x0 - 0z atyp - Salon vín','atyp - Salon vín',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('675','675 - 0x0 - 0z atyp - Baloun','atyp - Baloun',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('676','676 - 0x0 - 0z atyp - Baloun','atyp - Baloun',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('675','675 - 0x0 - 0z atyp - Baloun','atyp - Baloun',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('676','676 - 0x0 - 0z atyp - Baloun','atyp - Baloun',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('677','677 - 0x0 - 0z atyp - Zborovský','atyp - Zborovský',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('678','678 - 135x84.979 - 85z P,Z,P 135x40 a 100x40','P,Z,P 135x40 a 100x40',0,7,0,135,84.979,0,4.979,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('679','679 - 110x146.49 - 97z P,Z,P 110x75 a 100x64','P,Z,P 110x75 a 100x64',0,7,0,110,146.49,0,7.49,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
@@ -863,7 +875,7 @@ SELECT [Code]
 ('843','843 - 95x131.46875 - 85z P,Z,P (95x68 a 85x60)','P,Z,P (95x68 a 85x60)',0,7,0,95,131.46875,0,3.46875,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('844','844 - 0x0 - 0z ','',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('845','845 - 0x0 - 0z ','',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('846','846 - 140x70 - 70z ','',0,7,0,140,70,0,4.0833,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('846','846 - 140x70 - 70z ','',0,7,0,140,70,0,4.0833,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('847','847 - 130x132.46875 - 85z P,Z,P (130x70 a 95x60)','P,Z,P (130x70 a 95x60)',0,7,0,130,132.46875,0,2.46875,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('848','848 - 70x90 - 89z ','',0,7,0,70,90,3,4.191666,3,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('849','849 - 110x140 - 94z ','',0,7,0,110,140,0,9.225,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
@@ -1049,7 +1061,7 @@ SELECT [Code]
 ('1029','1029 - 0x0 - 0z ','',0,7,0,0,0,0,0,0,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('1030','1030 - 130x150.49375 - 97z P,Z,P (130x94, 85x53)','P,Z,P (130x94, 85x53)',0,7,0,130,150.49375,0,3.49375,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('1031','1031 - 60x145.49375 - 97z P,Z,P (60x84, 60x53)','P,Z,P (60x84, 60x53)',0,7,0,60,145.49375,3,8.49375,2,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
-('1032','1032 - 140x70 - 70z ','',0,7,0,140,70,0,4.0833,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
+--('1032','1032 - 140x70 - 70z ','',0,7,0,140,70,0,4.0833,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('1033','1033 - 26x26 - 81z kolečko prům. 26 mm','kolečko prům. 26 mm',0,7,0,26,26,6,6.146875,4,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('1034','1034 - 71x71 - 97z kolečko prům. 71 mm','kolečko prům. 71 mm',0,7,0,71,71,0,5.99375,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
 ('1035','1035 - 103x149.49375 - 97z P,Z,P, (103x95, 80x50)','P,Z,P, (103x95, 80x50)',0,7,0,103,149.49375,0,4.49375,1,NULL,'tomasbarcuch75@gmail.com','tomasbarcuch75@gmail.com',GETDATE(),GETDATE()),
@@ -1420,5 +1432,16 @@ SELECT [Code]
 ,[UpdatedBy]
 ,[Created]
 ,[Updated])
+
+) FORMS on 
+CF.[Description] = SUBSTRING(FORMS.[Description], CHARINDEX('-',FORMS.[Description])+2,LEN(FORMS.[Description])) AND
+CF.FormatLength = FORMS.FormatLength AND
+CF.LandscapePrintouts = FORMS.LandscapePrintouts AND 
+CF.LandscapeSpace = FORMS.LandscapeSpace AND
+CF.LongitudinalSpace = FORMS.LongitudinalSpace AND
+CF.NOTE = FORMS.Note 
+
+
+where SUBSTRING(FORMS.[Description], CHARINDEX('-',FORMS.[Description])+2,LEN(FORMS.[Description])) not in ('0x0 - 0z ', '0x0 - 0z neobsazeno')
 
 ROLLBACK

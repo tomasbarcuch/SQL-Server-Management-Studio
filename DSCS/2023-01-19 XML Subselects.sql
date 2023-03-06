@@ -8,6 +8,17 @@ FROM HandlingUnit HU
 GROUP BY HU.Id
 
 SELECT 
+   B.Id,
+   (SELECT ';' + HU.Code
+    FROM HandlingUnit HU
+    WHERE HU.ActualBinId = B.Id
+    FOR XML PATH('')) [HandlingUnitContent]
+FROM Bin B
+GROUP BY B.Id
+
+
+
+SELECT 
    TOPHU.Id,
    (SELECT ';' + HU.Code
     FROM HandlingUnit HU

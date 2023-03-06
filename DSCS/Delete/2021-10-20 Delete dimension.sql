@@ -1,6 +1,6 @@
 begin TRANSACTION
 
-Declare @DimensionId as UNIQUEIDENTIFIER = '45adc50f-f15b-4647-bbb2-d4b5e30ea251'
+Declare @DimensionId as UNIQUEIDENTIFIER = 'bcb09aeb-7c3f-4c83-bc93-2010c2b53de8'
 
 
 
@@ -17,4 +17,4 @@ delete from EntityDimensionValueRelation where DimensionValueId in (select id fr
 delete from DimensionValue where DimensionId = @DimensionId
 delete from Dimension where id = @DimensionId
 
-COMMIT
+ROLLBACK

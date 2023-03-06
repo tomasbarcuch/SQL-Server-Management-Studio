@@ -4,9 +4,7 @@ SUBSTRING(XMLDocument,CHARINDEX('"Code" : "',XMLDocument,1)+10,15)
 where ErrorMessage = 'Import Error: BaseUnitOfMeasure - Column: BaseUnitOfMeasure Value: PC - It is not allowed to change base unit of measure; It is not allowed to change base unit of measure'
 
 
-Select * FROM [DFCZ_OSLETSYNC].[dbo].[Queue] where ErrorMessage is not null
-
-
+Select * FROM DCNLPWSQL05.[DFCZ_OSLETSYNC].[dbo].[Queue] where ErrorMessage is not null ORDER by Updated desc
 
 
 --AND ProxyId = 'pcsduisync' ORDER BY Updated 
