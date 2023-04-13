@@ -67,6 +67,7 @@ when 65 then 'BinReservation'
 END AS Entity
 ,ENT.Code
 ,WFE.EntityId
+/*
 ,CASE WHEN @NoDates = 0 THEN (CONVERT(decimal,convert(datetime, WFE.Created))) 
 ELSE 
 CASE WHEN @NoDates = 1 THEN  CAST(CAST(WFE.Created as DATE) AS VARCHAR) 
@@ -75,10 +76,18 @@ CASE WHEN @NoDates = 2 THEN  CAST(ENT.Surface AS VARCHAR)
 ELSE 
 CASE WHEN @NoDates = 3 THEN  CAST(ENT.Weight AS VARCHAR)  
 END END END END as Done
---,CASE WFE.Created when NULL THEN 0 ELSE 1 END as Done
+*/
+--,WFE.Created
+,ENT.Surface
+,ENT.Weight
+,ENT.BaseArea
+,ENT.Netto
+,ENT.Brutto
+,ENT.Volume
+,1 'Count'
+
 FROM WorkflowEntry WFE
-INNER JOIN EntityDimensionValueRelation EDVR on WFE.EntityId = EDVR.EntityId
-AND EDVR.DimensionValueId = @DimensionValueId 
+INNER JOIN EntityDimensionValueRelation EDVR on WFE.EntityId = EDVR.EntityId AND EDVR.DimensionValueId = @DimensionValueId 
 AND WFE.ClientBusinessUnitId = @ClientBusinessUnitId 
 AND WFE.BusinessUnitId = @BusinessUnitID
 AND WFE.Entity in (10,11,15,31,35,37,48,65)
@@ -99,7 +108,7 @@ WHERE WFE.Created between @FromDate AND @ToDate
 
 
 ) SRC
-PIVOT (Min(src.Done) for src.WorkFlowAction  in (
+PIVOT (Min(src.Count) for src.WorkFlowAction  in (
 --[X],[4],[15],[18],[19],[20],[25],[26],[27],[28]
 --,[none]
 [Inbound]

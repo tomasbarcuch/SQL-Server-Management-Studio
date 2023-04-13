@@ -35,7 +35,7 @@ where WE.LocationId = @LocationId and WE.Quantity > 0
 
 LEFT JOIN (
 
-    select distinct  WE.HandlingUnitId,   
+    select WE.HandlingUnitId,   
 MAX(WE.Created) MaxCreated,WE.LocationId 
  from WarehouseEntry WE
 where WE.LocationId = @LocationId and WE.Quantity < 0
@@ -98,3 +98,16 @@ SELECT     [Id],[Code],[Weight],[Volume],[Surface],[BaseArea],[Netto],[Weight] a
   )
 ENT on DATA.EntityId = ENT.Id
 --INNER JOIN EntityDimensionValueRelation EDVR on DATA.EntityId = EDVR.EntityId AND EDVR.DimensionValueId = @DimensionValueId 
+
+
+
+
+select 
+L.Id LocationId,
+L.Name [Location]
+from [Location] L
+inner join BusinessUnitPermission BUP on L.id = BUP.LocationId and BUP.BusinessUnitId =  (select id from BusinessUnit where name = 'Deufol Hamburg Rosshafen')
+WHERE L.Disabled = 0 order by L.Name
+
+
+$P{RelatedBusinessUnitId}
