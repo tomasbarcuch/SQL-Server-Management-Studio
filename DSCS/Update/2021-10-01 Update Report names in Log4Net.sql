@@ -37,5 +37,7 @@ ROLLBACK
 */
 
 begin TRANSACTION
-update Log4Net set [Message] = REPLACE([Message],'REP-0059','DST-0031') from Log4Net where [Message] like '%REP-0058%'
+update Log4Net set [Message] = 
+--select
+REPLACE([Message],'REP-0104','DST-0041') from Log4Net where [Message] like '%REP-0104%'
 COMMIT

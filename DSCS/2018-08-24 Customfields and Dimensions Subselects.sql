@@ -1,4 +1,20 @@
-   
+
+SELECT
+
+ HU.Id,
+
+ (SELECT ';' + LP.Code + CHAR(10)+',Weight:'+CAST(LP.Weight as varchar)
+
+  FROM LoosePart LP
+
+  WHERE LP.ActualHandlingUnitId = HU.Id
+
+  FOR XML PATH('')) [HandlingUnitContent]
+
+FROM HandlingUnit HU
+
+GROUP BY HU.Id
+
 
 left join  (
 select
