@@ -7,14 +7,16 @@ from HandlingUnit hu
 inner join BusinessUnitPermission BUP on hu.Id = BUP.HandlingUnitId and BUP.BusinessUnitId = (select id from BusinessUnit where name like 'BASIS Client' )
 inner join [User] U on HU.CreatedById = U.Id
 --INNER JOIN WarehouseEntry we ON hu.id = we.HandlingUnitId
-WHERE HU.Created BETWEEN '2023-03-01' AND '2023-03-31' and --and we.QuantityBase > 0.00000
+WHERE HU.Created BETWEEN '2023-05-01' AND '2023-05-31' and --and we.QuantityBase > 0.00000
  HU.CreatedById in (
 select id from [User] where login in (
 'alex.myshkin',
 'alexander.nelde',
+'aneta.lebuda',
 'arnold.orovecz',
 'bora.abshagen',
 'cengiz.arikan',
+'denny.eckardt',
 'gentiana.muja',
 'gyoergy.venyerscan',
 'christian.libke',
@@ -28,10 +30,18 @@ select id from [User] where login in (
 'masse.date.kokouvi',
 'michael.schmid',
 'milan.obradovic',
+'nicole.seidemann',
 'noemi.nicoara',
 'peter.varnai',
 'srboljub.kostic',
-'tobias.beer'
+'tobias.beer',
+'tatjana.rahimic'
 
  ))
 group by U.[Login]
+
+/*
+aneta.lebuda
+nicole.seidemann
+denny.eckardt
+*/
