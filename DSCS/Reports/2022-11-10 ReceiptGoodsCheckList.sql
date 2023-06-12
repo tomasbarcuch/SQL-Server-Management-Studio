@@ -1,15 +1,16 @@
-DECLARE @BIANCO as TINYINT = 0
-DECLARE @Client as UNIQUEIDENTIFIER =
+DECLARE @BIANCO as TINYINT = 1
+DECLARE @Client as UNIQUEIDENTIFIER = (select id from BusinessUnit where name = 'Siemens Duisburg')
 --'825f4bff-17ce-4dad-af48-94c5298a1a96'
-'3b15a324-a7ae-4777-97a8-ba5e9ecf8d4c'
-DECLARE @Packer as UNIQUEIDENTIFIER = 
+--'3b15a324-a7ae-4777-97a8-ba5e9ecf8d4c'
+DECLARE @Packer as UNIQUEIDENTIFIER = (select id from BusinessUnit where name = 'Deufol Mülheim')
 --'825f4bff-17ce-4dad-af48-94c5298a1a96'
-'3b15a324-a7ae-4777-97a8-ba5e9ecf8d4c'
+--'3b15a324-a7ae-4777-97a8-ba5e9ecf8d4c'
 DECLARE @DimensValuesIDS as UNIQUEIDENTIFIER = 
 --'f1066734-bbb4-4ca1-b27f-7b1adf6c5dcc'
 --'6834a265-04e6-48d7-aaf9-412b290d0aad'
 --'c372175b-466b-4961-8191-32fc0c644592'
-'ea61889f-b3e6-4ab8-b452-864d2539c437'
+--'ea61889f-b3e6-4ab8-b452-864d2539c437'
+'e04ba73d-c7c8-48c7-928c-c6f0641b8c15'
 
 
 
@@ -135,8 +136,8 @@ inner join Translation W on DUOM.id = W.EntityId and W.Language = ISNULL(U.LastL
 
 
 WHERE  U.Id =  'eba86d7e-e20e-40f0-8e6e-1831fe48e45a'
-AND ((case when @BIANCO = 1 and Ent.Id IS NULL then 1 else 0 end) = 1
-OR (case when @BIANCO = 0 and Ent.Id IS NOT NULL then 1 else 0 end) = 1)
+AND ((case when @BIANCO = 1 /*and Ent.Id IS NULL */then 1 else 0 end) = 1
+OR (case when @BIANCO = 0 /*and Ent.Id IS NOT NULL*/ then 1 else 0 end) = 1)
 /*
 AND ((case when @BIANCO = 0 and Ent.Id IS NULL then 1 else 0 end) = 1
 OR

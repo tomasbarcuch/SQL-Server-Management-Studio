@@ -16,16 +16,17 @@ COMMIT
 begin TRANSACTION
 --select BU.Name, HU.Code, Protection,
 update HandlingUnit set Protection = 
-Case when Protection is null then 0 Else 
-Case when Protection between 1 and 5 then 6 Else 
+Case when Protection is null then 0 Else
+Case when Protection between 1 and 2 then 3 Else  
+Case when Protection between 4 and 5 then 6 Else 
 case when Protection between 7 and 11 then 12 else 
 case when Protection between 13 and 17 then 18 else 
 case when Protection between 19 and 23 then 24 else
 case when Protection between 25 and 999 then 36
-end end end end end end
+end end end end end end end
 from HandlingUnit HU 
 inner join BusinessUnitPermission BUP on HU.id = BUP.HandlingUnitId
 inner join BusinessUnit BU on BUP.BusinessUnitId = BU.id and BU.[Type] = 2
-where Protection not in (0,6,12,18,24,36)
+where Protection not in (0,3,6,12,18,24,36)
 
 COMMIT

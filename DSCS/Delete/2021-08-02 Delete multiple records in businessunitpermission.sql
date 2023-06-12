@@ -15,22 +15,22 @@ group by BusinessUnitId, LoosepartId
 having count(ID) > 1
 )
 
-/*
-select min(Id), count(ID), BusinessUnitId, HandlingUnitId
+delete from BusinessUnitPermission where id in (
+select min(Id)--, count(ID), BusinessUnitId, HandlingUnitId
 from BusinessUnitPermission
 where HandlingUnitId is not NULL
 group by BusinessUnitId, HandlingUnitId
 having count(ID) > 1
-
-
-select min(Id), count(ID), BusinessUnitId, PackingOrderHeaderId
+)
+delete from BusinessUnitPermission where id in (
+select min(Id)--, count(ID), BusinessUnitId, PackingOrderHeaderId
 from BusinessUnitPermission
 where PackingOrderHeaderId is not NULL
 group by BusinessUnitId, PackingOrderHeaderId
 having count(ID) > 1
-*/
+)
 
-delete from BusinessUnitPermission where id = (
+delete from BusinessUnitPermission where id in (
 select min(Id)--, count(ID), BusinessUnitId, ShipmentHeaderId
 from BusinessUnitPermission
 where ShipmentHeaderId is not NULL

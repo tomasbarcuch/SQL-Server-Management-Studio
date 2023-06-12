@@ -1,7 +1,7 @@
 --DECLARE @client as UNIQUEIDENTIFIER = (select id from BusinessUnit where name = 'Diverse Kunden Münsterland')
 --DECLARE @client as UNIQUEIDENTIFIER = (select id from BusinessUnit where name = 'Diverse Kunden Troisdorf')
 --DECLARE @client as UNIQUEIDENTIFIER = (select id from BusinessUnit where name = 'Diverse Kunden Mülheim')
-DECLARE @client as UNIQUEIDENTIFIER = (select id from BusinessUnit where name = 'Diverse Kunden Dortmund')
+DECLARE @client as UNIQUEIDENTIFIER = (select id from BusinessUnit where name = 'DEUFOL CUSTOMERS')
 
 select CASE WHEN WFUSED.Entity IS NULL then 'NOT USED' ELSE 'USED' END as USED,
  CASE WF.Entity

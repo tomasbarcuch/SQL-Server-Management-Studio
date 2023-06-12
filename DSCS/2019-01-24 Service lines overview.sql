@@ -111,5 +111,5 @@ where
 --((s.name in ('HuPacked')) or (s.name in ('lpPacked') and
 ((ent.TopHandlingUnitId is null))
 
-and packed.Packed between '2019-01-01' and '2019-01-31'
-and ent.code = '35356/88048'
+and packed.Packed between '2023-05-01' and '2023-05-31'
+--and ent.code = '35356/88048'
